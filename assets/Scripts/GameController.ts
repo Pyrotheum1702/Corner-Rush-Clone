@@ -19,11 +19,6 @@ enum ClockDirection {
   COUNTER_CLOCKWISE
 }
 
-class UserData {
-  highScore: number
-  audio: boolean
-}
-
 @ccclass('GameController')
 export class GameController extends Component {
 
@@ -124,14 +119,12 @@ export class GameController extends Component {
 
     pCollider.on(Contact2DType.BEGIN_CONTACT, this.onPlayerContact, this);
 
-    const localUserData: UserData = JSON.parse(sys.localStorage.getItem('userData'));
-    if (localUserData != null) {
-      this.isAudioOn = localUserData.audio;
-    } else {
-      let newUserData = new UserData();
-      newUserData.audio = true;
-      newUserData.highScore = 0;
-      sys.localStorage.setItem('userData', JSON.stringify(newUserData));
+    if (sys.localStorage.getItem('audio') != null) {
+      this.isAudioOn = JSON.parse(sys.localStorage.getItem('audio'));
+    }
+    else {
+      this.isAudioOn = true;
+      sys.localStorage.setItem('highScore', '0');
     }
   }
 
@@ -281,20 +274,14 @@ export class GameController extends Component {
   }
 
   onGameOver() {
-    const localUserData: UserData = JSON.parse(sys.localStorage.getItem('userData'));
-    let localHighScore: number;
+    let localHighScore = parseInt(sys.localStorage.getItem('highScore'));
 
-    if (localUserData != null) localHighScore = localUserData.highScore;
-    else localHighScore = 0;
+    if (sys.localStorage.getItem('highScore') == null) localHighScore = 0;
 
     if (this.playerCurrentScore > localHighScore) {
-      let userData = new UserData();
-
-      userData.audio = localUserData.audio;
-      userData.highScore = this.playerCurrentScore;
       GameController.instance.playerHighScore = this.playerCurrentScore;
 
-      sys.localStorage.setItem('userData', JSON.stringify(userData));
+      sys.localStorage.setItem('highScore', this.playerCurrentScore.toString());
 
       this.resultScoreLabel.color = color(255, 218, 6, 255);
       this.resultComplimentLabel.string = 'new best!'
@@ -397,12 +384,7 @@ export class GameController extends Component {
       this.audioSprite.spriteFrame = this.audioOffSprite;
     }
 
-    const localUserData: UserData = JSON.parse(sys.localStorage.getItem('userData'));
-    let newUserData = new UserData();
-    newUserData.audio = this._isAudioOn;
-    newUserData.highScore = localUserData.highScore;
-
-    sys.localStorage.setItem('userData', JSON.stringify(newUserData));
+    sys.localStorage.setItem('audio', this._isAudioOn ? "true" : "false");
   }
 }
 
