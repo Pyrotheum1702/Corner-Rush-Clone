@@ -1,0 +1,49 @@
+{
+  "__version__": "1.0.4",
+  "general": {
+    "designResolution": {
+      "width": 1080,
+      "height": 1920,
+      "fitHeight": true
+    }
+  },
+  "layer": [
+    {
+      "name": "Ground",
+      "value": 1
+    },
+    {
+      "name": "Player",
+      "value": 32
+    },
+    {
+      "name": "Trail",
+      "value": 8
+    },
+    {
+      "name": "Point",
+      "value": 16
+    },
+    {
+      "name": "Wall",
+      "value": 2
+    }
+  ],
+  "physics": {
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "POINT"
+      },
+      {
+        "index": 2,
+        "name": "PLAYER"
+      }
+    ],
+    "collisionMatrix": {
+      "0": 4,
+      "1": 4,
+      "2": 3
+    }
+  }
+}
